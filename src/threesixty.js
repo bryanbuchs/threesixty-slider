@@ -198,7 +198,7 @@
       if (AppConfig.drag) {
         base.initEvents();
       }
-      base.refresh();
+      base.refresh(AppConfig.onSpinComplete);
       base.initPlugins();
       AppConfig.onReady();
 
@@ -854,6 +854,13 @@
        * Callback triggers when a user releases after dragging
        */
       onDragStop: function() {},
+
+      /**
+       * @cfg {Function} onSpinComplete
+       * Callback triggered when initial spin is complete
+       */
+      onSpinComplete: function() {},
+
       /**
        * @cfg {String} imgList
        * Set ul element where image will be loaded
