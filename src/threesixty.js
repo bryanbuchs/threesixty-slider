@@ -356,10 +356,10 @@
      * Function animates to previous frame
      *
      */
-    base.gotoAndPlay = function (n) {
+    base.gotoAndPlay = function (n, callback) {
       if( AppConfig.disableWrap ) {
         AppConfig.endFrame = n;
-        base.refresh();
+        base.refresh(callback);
       } else {
         // Since we could be looped around grab the multiplier
         var multiplier = Math.ceil(AppConfig.endFrame / AppConfig.totalFrames);
@@ -395,7 +395,7 @@
         // Now set the end frame
         if(realEndFrame !== n) {
           AppConfig.endFrame = newEndFrame;
-          base.refresh();
+          base.refresh(callback);
         }
       }
     };
@@ -501,9 +501,9 @@
      *
      */
 
-    base.refresh = function () {
+    base.refresh = function (callback) {
       if (AppConfig.ticker === 0) {
-        AppConfig.ticker = setInterval(base.render, Math.round(1000 / AppConfig.framerate));
+        AppConfig.ticker = setInterval(base.render, Math.round(1000 / AppConfig.framerate), callback);
       }
     };
 
@@ -513,7 +513,7 @@
      * Function render the animation frames on the screen with easing effect.
      */
 
-    base.render = function () {
+    base.render = function (callback) {
       var frameEasing;
       if (AppConfig.currentFrame !== AppConfig.endFrame) {
         frameEasing = AppConfig.endFrame < AppConfig.currentFrame ? Math.floor((AppConfig.endFrame - AppConfig.currentFrame) * 0.1) : Math.ceil((AppConfig.endFrame - AppConfig.currentFrame) * 0.1);
@@ -524,6 +524,9 @@
       } else {
         window.clearInterval(AppConfig.ticker);
         AppConfig.ticker = 0;
+        if (callback) {
+           callback.call(this);
+        }
       }
     };
 
